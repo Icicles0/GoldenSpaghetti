@@ -3,10 +3,11 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include "player.h"
 
 using namespace std;
 
-int main() // TODO: add a player
+int main()
 {
     sf::RenderWindow window(sf::VideoMode(533, 533), "GoldenSpaghetti Base");
 

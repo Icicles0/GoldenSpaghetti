@@ -1,5 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <fstream>
+#include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -7,6 +10,25 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(533, 533), "GoldenSpaghetti Base");
 
+    // read map data
+    string stringmap;
+
+    ifstream MapStream("main.gsp");
+
+    getline(MapStream, stringmap);
+
+    // load map data into vector
+    vector<int> mapData;
+
+    for (int i = 0; i < 100; i++) {
+        mapData.push_back(stringmap[i] - '0'); // thank you kyle for the fix
+    }
+
+    for (int i = 0; i < 100; i++) {
+        cout << mapData[i] << endl;
+    }
+
+    /*
     vector<int> mapData =
       { 1, 7, 7, 7, 7, 7, 7, 7, 7, 2,
         5, 9, 9, 9, 9, 9, 9, 9, 9, 6,
@@ -18,6 +40,7 @@ int main()
         5, 9, 9, 9, 9, 9, 9, 9, 9, 6,
         5, 9, 9, 9, 9, 9, 9, 9, 9, 6,
         3, 8, 8, 8, 8, 8, 8, 8, 8, 4 }; // 10x10 grid
+    */
 
     vector<sf::Sprite> sprites;
 

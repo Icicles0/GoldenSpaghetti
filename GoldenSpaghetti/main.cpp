@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int main()
+int main() // TODO: add a player
 {
     sf::RenderWindow window(sf::VideoMode(533, 533), "GoldenSpaghetti Base");
 

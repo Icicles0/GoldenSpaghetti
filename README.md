@@ -13,7 +13,7 @@ Rendering: ✅
 
 Reading Map Data: ✅
 
-Player: 
+Player: ✅ (kind of)
 
 Text System: 
 

@@ -44,6 +44,7 @@ int main()
     sf::Texture topGrassTex;
     sf::Texture bottomGrassTex;
     sf::Texture GrassTex;
+    sf::Texture playerTex;
     topLeftGrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(0, 0, 16, 16));
     topRightGrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(16*2, 0, 16, 16));
     bottomLeftGrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(0, 16*2, 16, 16));
@@ -53,6 +54,7 @@ int main()
     topGrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(16, 0, 16, 16));
     bottomGrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(16, 16*2, 16, 16));
     GrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(16, 16, 16, 16));
+    playerTex.create(16, 16); // placeholder until i find a player texture (or make one)
 
     // process map data and create sprites
 
@@ -119,6 +121,18 @@ int main()
         }
     }
 
+    // init player
+    Player player = Player();
+    
+    // set cords to 5 and 5
+    player.setPlayerX(5*16);
+    player.setPlayerY(5*16);
+
+    player.setTexture(playerTex);
+
+    sf::Clock movementClock;
+
+    float movementCooldown = 0.5f;
 
     while (window.isOpen())
     {
@@ -127,12 +141,38 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && movementClock.getElapsedTime().asSeconds() > movementCooldown)
+        {
+            player.setPlayerY(player.getPlayerY() - 16);
+            movementClock.restart();
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && movementClock.getElapsedTime().asSeconds() > movementCooldown)
+        {
+            player.setPlayerY(player.getPlayerY() + 16);
+            movementClock.restart();
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && movementClock.getElapsedTime().asSeconds() > movementCooldown)
+        {
+            player.setPlayerX(player.getPlayerX() - 16);
+            movementClock.restart();
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && movementClock.getElapsedTime().asSeconds() > movementCooldown)
+        {
+            player.setPlayerX(player.getPlayerX() + 16);
+            movementClock.restart();
         }
 
         window.clear();
+        // draw sprites in vector
         for (int i = 0; i < sprites.size(); i++) {
             window.draw(sprites[i]);
         }
+
+        // draw player sprite
+        window.draw(player.getSprite());
         window.display();
     }
 

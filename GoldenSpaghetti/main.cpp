@@ -4,12 +4,13 @@
 #include <string>
 #include <iostream>
 #include "player.h"
+#include "config.h"
 
 using namespace std;
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(533, 533), "GoldenSpaghetti Base");
+    sf::RenderWindow window(sf::VideoMode(533, 533), WINDOW_TITLE);
 
     // read map data
     string stringmap;
@@ -45,15 +46,15 @@ int main()
     sf::Texture bottomGrassTex;
     sf::Texture GrassTex;
     sf::Texture playerTex;
-    topLeftGrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(0, 0, 16, 16));
-    topRightGrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(16*2, 0, 16, 16));
-    bottomLeftGrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(0, 16*2, 16, 16));
-    bottomRightGrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(16*2, 16*2, 16, 16));
-    leftGrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(0, 16, 16, 16));
-    rightGrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(16*2, 16, 16, 16));
-    topGrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(16, 0, 16, 16));
-    bottomGrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(16, 16*2, 16, 16));
-    GrassTex.loadFromFile("emberwildterrain.png", sf::IntRect(16, 16, 16, 16));
+    topLeftGrassTex.loadFromFile(TEXTURE_FILE, sf::IntRect(0, 0, 16, 16));
+    topRightGrassTex.loadFromFile(TEXTURE_FILE, sf::IntRect(16*2, 0, 16, 16));
+    bottomLeftGrassTex.loadFromFile(TEXTURE_FILE, sf::IntRect(0, 16*2, 16, 16));
+    bottomRightGrassTex.loadFromFile(TEXTURE_FILE, sf::IntRect(16*2, 16*2, 16, 16));
+    leftGrassTex.loadFromFile(TEXTURE_FILE, sf::IntRect(0, 16, 16, 16));
+    rightGrassTex.loadFromFile(TEXTURE_FILE, sf::IntRect(16*2, 16, 16, 16));
+    topGrassTex.loadFromFile(TEXTURE_FILE, sf::IntRect(16, 0, 16, 16));
+    bottomGrassTex.loadFromFile(TEXTURE_FILE, sf::IntRect(16, 16*2, 16, 16));
+    GrassTex.loadFromFile(TEXTURE_FILE, sf::IntRect(16, 16, 16, 16));
     playerTex.create(16, 16); // placeholder until i find a player texture (or make one)
 
     // process map data and create sprites
@@ -123,16 +124,20 @@ int main()
 
     // init player
     Player player = Player();
-    
-    // set cords to 5 and 5
-    player.setPlayerX(5*16);
-    player.setPlayerY(5*16);
+
+    // set cords
+    if (USE_PIXEL_SPAWN_CORDS) { // config is set to use pixel cords
+        player.setPlayerX(SPAWN_X);
+        player.setPlayerY(SPAWN_Y);
+    } else {                     // config is set to tile cords
+        player.setPlayerX(SPAWN_X * 16);
+        player.setPlayerY(SPAWN_Y * 16);
+    }
 
     player.setTexture(playerTex);
 
     sf::Clock movementClock;
 
-    float movementCooldown = 0.5f;
 
     while (window.isOpen())
     {
@@ -144,24 +149,24 @@ int main()
 
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && movementClock.getElapsedTime().asSeconds() > movementCooldown)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && movementClock.getElapsedTime().asSeconds() > MOVEMENT_COOLDOWN)
         {
-            player.setPlayerY(player.getPlayerY() - 16);
+            player.setPlayerY(player.getPlayerY() - MOVEMENT_Y_OFFSET);
             movementClock.restart();
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && movementClock.getElapsedTime().asSeconds() > movementCooldown)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && movementClock.getElapsedTime().asSeconds() > MOVEMENT_COOLDOWN)
         {
-            player.setPlayerY(player.getPlayerY() + 16);
+            player.setPlayerY(player.getPlayerY() + MOVEMENT_Y_OFFSET);
             movementClock.restart();
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && movementClock.getElapsedTime().asSeconds() > movementCooldown)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && movementClock.getElapsedTime().asSeconds() > MOVEMENT_COOLDOWN)
         {
-            player.setPlayerX(player.getPlayerX() - 16);
+            player.setPlayerX(player.getPlayerX() - MOVEMENT_X_OFFSET);
             movementClock.restart();
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && movementClock.getElapsedTime().asSeconds() > movementCooldown)
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && movementClock.getElapsedTime().asSeconds() > MOVEMENT_COOLDOWN)
         {
-            player.setPlayerX(player.getPlayerX() + 16);
+            player.setPlayerX(player.getPlayerX() + MOVEMENT_X_OFFSET);
             movementClock.restart();
         }
 
